@@ -54,7 +54,7 @@ After VM2 is created, go to the start menu on your computer and type in "Remote 
 </p>
 <br />
 
-<h2>Installing Wireshark</h3>
+<h3>Installing Wireshark</h3>
 
 <p>
 <img src="https://i.imgur.com/8Nx9ucw.jpg" height="80%" width="80%" alt="Disk Sanitization Steps"/>
@@ -73,7 +73,7 @@ Starting up Wireshark should bring up the image above. Click on "Ethernet and at
 </p>
 <br />
 
-<h2>Observing ICMP Traffic</h3>
+<h3>Observing ICMP Traffic</h3>
 
 <p>
 <img src="https://i.imgur.com/Eux3MYF.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
@@ -120,20 +120,45 @@ Going back into VM1, we can see that the new security is working and VM1's pings
 </p>
 <br />
 
-<h2>Observing SSH Traffic</h3>
+<h3>Observing SSH Traffic</h3>
 
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://i.imgur.com/A3N0ogw.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+From VM1's Wireshark, return to the search bar and replace "icmp" with "ssh" to observe only SSH traffic. With SSH we can login remotely from VM1 to VM2 through the Command Prompt. To do this, we will type in "ssh (username)@(private IP)", fill in the blanks with the 2nd VM's username and Private IP. The command prompt will then give you a confirmation that you want to remote access VM2. Upon saying yes the command prompt will then ask for VM2's password. When typing it in, you'll notice that the password doesn't actually show up in the command line. This is intentional in order to avoid showing the password. Once you type out the correct password and press Enter, the command prompt will give you the information on the accessed device, like the image above. You now have a direct access to VM2 from VM1.
+  
+You'll notice that the Wireshark traffic shows that VM1 was attempting to access VM2 and once the appropriate information was sent in the Command line, a secured line has been created so now the two VMS can relay information to one-another. Once you're finished, to exit from VM2 in the command prompt, type "Exit" and press enter to return to VM1's command prompt.
 </p>
 <br />
 
+<h3>Observing DHCP Traffic</h3>
+
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://i.imgur.com/rHbM4Or.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Back in the Wireshark program, go to search display filter and replace "ssh" with "dhcp". DHCP is what assigns new IP addresses to networks. To see how this works, we go back to our Command Prompt and type in "ipconfig /renew". Because we are using a VM and releasing an IP address, which in turn disrupts the Remote Desktop Access to the VM, it will likely come out as an error but the traffic will show that the VM sent out request for a new IP, and was ultimately denied.
 </p>
 <br />
+
+<h3>Observing DNS Traffic</h3>
+
+<p>
+<img src="https://i.imgur.com/U4CqtoN.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+Going back to Wireshark in the Display Filter search bar, change DHCP to DNS. Domain Name System (DNS) is what hostnames or websites use to connect themselves to an IP address. In the command prompt type in "nslookup www.google.com" or "nslookup www.youtube.com", and we see that these IP addresses go by an alias, which is the name of the sites.
+</p>
+<br />
+
+<h3>Observing RDP Traffic</h3>
+
+<p>
+<img src="https://i.imgur.com/RbfX9My.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+</p>
+<p>
+The final type of traffic we'll be looking at is the Remote Desktop Protocol (RDP). To only look at RPD traffic in Wireshark, go to the display filter and type in "tcp.port == 3389". You will immediately notice that traffic is currently moving through the VM on Wireshark. This is because data is constantly being transmitted from the Azure Server and the VM, even when nothing is going on in the VM at the surface. In a way you are watching a live-stream of VM1 and that data needs to be transmitted for you to see it, so there will always be a constant flow of traffic. 
+</p>
+<br />
+
